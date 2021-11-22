@@ -47,6 +47,7 @@
       width: 122px;
     }
   </style>
+  
 </head>
 
 <body>
@@ -69,24 +70,29 @@
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
+      <button onclick='console.log("Console Log Demo")'>Console Log</button>
+      <button onclick='console.error("Console Error Demo")'>Console Error</button>
+      <button onclick='console.count("Count Button")'>Console Count</button>
+      <button onclick='console.warn("Console Warn Demo")'>Console Warn</button>
+      <button onclick='console.assert(24>25,{ErrorMsg:"24 is not greater than 25"})'>Console Assert</button>
+      <button onclick='console.clear()'>Console Clear</button>
+      <button onclick='console.dir(document.querySelectorAll("button")[7])'>Console Dir</button>
+      <button onclick='console.dirxml(document.querySelectorAll("button")[8])'>Console dirxml</button>
+      <button onclick='console.group("Console Group")'>Console Group Start</button>
+      <button onclick='console.groupEnd("Console Group")'>Console Group End</button>
       <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
+      <button onclick='console.time()'>Start Timer</button>
+      <button onclick='console.timeEnd()';>End Timer</button>
       <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button onclick='console.error("Global Error Demo")'>Trigger a Global Error</button>
     </section>
   </main>
-
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+      window.TrackJS && TrackJS.install({
+          token: "b6f4f41d2662468f84e1734f6cea01ff"
+      });
+  </script>
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -102,7 +108,73 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
+    let consoleTable = errorBtns[10];
+    consoleTable.addEventListener("click", console.table([
+      {
+        first: 'René',
+        last: 'Magritte',
+      },
+      {
+        first: 'Chaim',
+        last: 'Soutine',
+        birthday: '18930113',
+      },
+      {
+        first: 'Henri',
+        last: 'Matisse',
+      }
+    ]));
+  let consoleTrace = errorBtns[13];
+  consoleTrace.addEventListener("click", e => {
+  const first = () => { second(); };
+  const second = () => { third(); };
+  const third = () => { fourth(); };
+  const fourth = () => { console.trace(); };
+  first();
+  });
+
+
+  let calculateBtn = document.querySelector("button");
+  
+  calculateBtn.addEventListener("click", e => {
+    try {
+      let firstNum = document.querySelector('#first-num').value;
+      eval('firstNum * 1.0');
+      if(firstNum == ""){
+        throw 'First Num Not Defined'
+      }
+      console.log("First Number Valid"); 
+    }catch(err){
+      throw new SyntaxError("First Number is Undefined");
+    }finally{
+      console.log("Test Complete");
+    }
+  }
+  );
+  calculateBtn.addEventListener("click", e => {
+    try{
+      let operator = document.querySelector('#operator').value;
+      let secondNum = document.querySelector('#second-num').value;
+      if(secondNum == '0' && operator == '/'){
+      throw new undefinedError("Undefined Answer");
+      }
+      console.log("Operation Complete");
+    }catch{
+      throw new undefinedError("Undefined Answer");
+    }
+  })
+ 
+  class undefinedError extends Error{
+    constructor(message) {
+    super(message); // (1)
+    this.name = "undefinedError"; // (2)
+  }
+  }
+  TrackJS.track('Testing TrackJS!');
+                        
   </script>
+
+
 </body>
 
 </html>
